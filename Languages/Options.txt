@@ -1,0 +1,7 @@
+Language = English
+
+----
+
+Currently supported:
+
+*English
