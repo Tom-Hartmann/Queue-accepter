@@ -2,7 +2,7 @@ from tkinter import *
 import os
 import time
 import pyautogui
-
+pyautogui.FAILSAFE = FALSE
 #Main function
 def img():
     if toggle_button.config('text')[-1] == 'ON' :
@@ -10,16 +10,18 @@ def img():
         imglocation = pyautogui.locateCenterOnScreen('accept.png', confidence=0.7)
         if imglocation != None:
             toggle_button.config(text='OFF')
-            pyautogui.moveTo(imglocation,duration=0.2)
+            CurrenPostion = pyautogui.position()
+            pyautogui.moveTo(imglocation,duration=0)
             pyautogui.click()
+            pyautogui.moveTo(CurrenPostion,duration=0)
             print ("gl")
             time.sleep(10)
-            print ("Slept 5s")
+            print ("Slept 10 seconds")
     imglocation2 = pyautogui.locateCenterOnScreen('notaccept.png', confidence=0.7)
     if imglocation2 != None :
         toggle_button.config(text='ON')
         print("Someone didn't accept!")
-    root.after(2000,img)
+    root.after(300,img)
     imglocation3 = pyautogui.locateCenterOnScreen('balance.png', confidence=0.7)
     if toggle_button.config('text')[-1] == 'OFF' and imglocation3 != None:
         if automode_button.config('text')[-1] == 'Automode ON':
