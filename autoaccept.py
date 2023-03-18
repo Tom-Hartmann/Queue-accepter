@@ -1,85 +1,14 @@
-from tkinter import *
 import os
 import time
-import pyautogui
 import json
-pyautogui.FAILSAFE = FALSE
+import pyautogui
+import threading
+from tkinter import *
 
-jsonpener = open('config.json', 'r').read()
-obj = json.loads(jsonpener)
+pyautogui.FAILSAFE = False
 
-# Main function
-
-
-def img():
-    if toggle_button.config('text')[-1] == 'ON':
-        print("Searching for a game")
-        imglocation = pyautogui.locateCenterOnScreen(
-            'accept.png', confidence=0.7)
-        if imglocation != None:
-            toggle_button.config(text='OFF')
-            CurrenPostion = pyautogui.position()
-            # pyautogui.moveTo(imglocation,duration=0)
-            pyautogui.click(imglocation)
-            pyautogui.moveTo(CurrenPostion, duration=0)
-            print("gl")
-            # sleeping to not stay on while in champ select/ingame | tempfix
-            time.sleep(10)
-            print("Slept 10 seconds")
-    dodgelocation = pyautogui.locateCenterOnScreen(
-        'notaccept.png', confidence=0.7)
-    if dodgelocation != None:
-        toggle_button.config(text='ON')
-        print("Someone didn't accept!")
-    root.after(2000, img)
-    balancelocation = pyautogui.locateCenterOnScreen(
-        'balance.png', confidence=0.7)
-    if toggle_button.config('text')[-1] == 'OFF' and balancelocation != None:
-        if automode_button.config('text')[-1] == 'Automode ON':
-            toggle_button.config(text='ON')
-            ban_button.config(text='BAN ON')
-            lockin_button.config(text='Lock ON')
-            print('ON')
-    banphase = pyautogui.locateCenterOnScreen('ban.png', confidence=0.9)
-    cancerchampbannen = pyautogui.locateCenterOnScreen(
-        'ban2.png', confidence=0.7)
-    searchbar = pyautogui.locateCenterOnScreen('search.png', confidence=0.9)
-    frame = pyautogui.locateCenterOnScreen('frame.png', confidence=0.7)
-    confirmban = pyautogui.locateCenterOnScreen(
-        'confirmban.png', confidence=0.7)  # Der bann muss durch!
-    if toggle_button.config('text')[-1] == 'OFF' and banphase != None:
-        if ban_button.config('text')[-1] == 'BAN ON':
-            print('BAN PHASE!')
-            pyautogui.click(searchbar)
-            # pyautogui.hotkey('ctrl','a')
-            # pyautogui.hotkey('return')
-            pyautogui.write(obj['banchamp'])
-            time.sleep(0.5)
-            print('Trying to click the frame')
-            print(frame)
-            xlst = list(frame)
-            del xlst[1]
-            lst = list(frame)
-            del lst[0]
-            print(xlst, lst)
-            # Thanks to gianpi#1307 für helping me with this part.
-            ycords = int(''.join(str(i) for i in lst))
-            ycords += 60
-            pyautogui.moveTo(frame)
-            x, y = pyautogui.position()
-            x, y = pyautogui.position()
-            pyautogui.click(y=ycords, x=x)
-            pyautogui.click(cancerchampbannen, duration=0)
-            time.sleep(2)
-            print('Checking for ban confirmation.')
-            pyautogui.click(confirmban, duration=0)
-            ban_button.config(text='BAN OFF')
-    lockinimg = pyautogui.locateCenterOnScreen('lockin.png', confidence=0.7)
-    if toggle_button.config('text')[-1] == 'OFF' and lockin_button != None:
-        if lockin_button.config('text')[-1] == 'Lock ON':
-            if lockinimg != None:
-                pyautogui.click(lockinimg, duration=0)
-                lockin_button.config(text='Lock OFF')
+with open('config.json', 'r') as json_file:
+    obj = json.loads(json_file.read())
 
 # Get Language
 
@@ -92,7 +21,79 @@ def Lang():
     text = obj['Language']
     os.chdir(os.path.join(path, text))
 
-# Button on/off
+
+def on_close():
+    root.destroy()
+
+
+def locate(image, confidence=0.7):
+    location = pyautogui.locateCenterOnScreen(image, confidence=confidence)
+    if location is not None:
+        return True
+    return False
+
+
+def locate_and_click(image, confidence=0.7):
+    location = pyautogui.locateCenterOnScreen(image, confidence=confidence)
+    if location is not None:
+        pyautogui.click(location)
+        return True
+    return False
+
+
+localvaribable = False
+
+
+def img():
+    while True:
+        if toggle_button.config('text')[-1] == 'OFF' and locate('balance.png'):
+            if automode_button.config('text')[-1] == 'Automode ON':
+                toggle_button.config(text='ON')
+                if obj['AutoBan'] == "True":
+                    ban_button.config(text='BAN ON')
+                if obj['AutoBan'] == "True":
+                    lockin_button.config(text='Lock ON')
+                print('ON')
+        if toggle_button.config('text')[-1] == 'ON':
+            if locate_and_click('accept.png'):
+                toggle_button.config(text='OFF')
+                print("Game accepted")
+                time.sleep(10)
+                print("Slept 10 seconds")
+        if locate('notaccept.png'):
+            toggle_button.config(text='ON')
+            print("Someone didn't accept!")
+        if toggle_button.config('text')[-1] == 'OFF':
+            if locate('ban.png'):
+               localvaribable == True  # and locate('ban.png', confidence=0.9):
+               if ban_button.config('text')[-1] == 'BAN ON':
+                    if localvaribable == True:
+                        print('BAN PHASE!')
+                        locate_and_click('search.png', confidence=0.9)
+                        pyautogui.write(obj['banchamp'])
+                        time.sleep(0.5)
+                        frame_location = locate('frame.png')
+                        pyautogui.moveTo(frame_location)
+                        x, y = pyautogui.position()
+                        pyautogui.click(y=y + 60, x=x)
+                        locate_and_click('ban2.png')
+                        time.sleep(1)
+                        locate_and_click('confirmban.png')
+                        ban_button.config(text='BAN OFF')
+                        localvaribable == False
+            if toggle_button.config('text')[-1] == 'OFF' and lockin_button != None:
+                if lockin_button.config('text')[-1] == 'Lock ON':
+                    if locate_and_click('lockin.png'):
+                        lockin_button.config(text='Lock OFF')
+
+
+time.sleep(1)
+
+
+def start_thread(target_function):
+    thread = threading.Thread(target=target_function)
+    thread.daemon = True
+    thread.start()
 
 
 def Simpletoggle():
@@ -103,8 +104,6 @@ def Simpletoggle():
         toggle_button.config(text='ON')
         print("ON")
 
-# Button Automode on/off
-
 
 def Autotoggle():
     if automode_button.config('text')[-1] == 'Automode ON':
@@ -114,8 +113,6 @@ def Autotoggle():
         automode_button.config(text='Automode ON')
         print('Automode ON')
 
-# Button Lock in on/off
-
 
 def Lockin():
     if lockin_button.config('text')[-1] == 'Lock ON':
@@ -124,8 +121,6 @@ def Lockin():
     else:
         lockin_button.config(text='Lock ON')
         print('Lock ON')
-
-# Button Ban on/off
 
 
 def BanChamp():
@@ -137,42 +132,78 @@ def BanChamp():
         print('BAN ON')
 
 
-# Window
+def start_move(event):
+    global x, y
+    x = event.x
+    y = event.y
+
+
+def stop_move(event):
+    global x, y
+    x = None
+    y = None
+
+
+def on_motion(event):
+    global x, y
+    deltax = event.x - x
+    deltay = event.y - y
+    new_position = "+{}+{}".format(root.winfo_x() +
+                                   deltax, root.winfo_y() + deltay)
+    root.geometry(new_position)
+
+
+# Create main window
 root = Tk()
-root.title("Queue Accepter")
-root.iconbitmap("icon.ico")
-root['background'] = 'black'
-Hauteur = 0
-Largeur = 250
-(H, L, c) = (Hauteur, Largeur, "white")
-Dessin = Canvas(root, height=H, width=L, bg=c)
-Dessin.pack()
+root.geometry("250x180")
+root.configure(bg='black')
+
+# Remove default title bar
+root.overrideredirect(1)
+
+# Create custom title bar frame
+title_bar = Frame(root, bg='black', relief='raised', bd=2, height=30)
+title_bar.pack(fill=X, side=TOP)
+
+# Create title label
+title = Label(title_bar, text="Queue Accepter", bg='black', fg='white')
+title.pack(side=LEFT, padx=5)
+
+# Create close button
+close_button = Button(title_bar, text="X", bg='black',
+                      fg='white', relief=FLAT, command=on_close)
+close_button.pack(side=RIGHT)
+
+# Bind the functions to the title_bar frame
+title_bar.bind("<ButtonPress-1>", start_move)
+title_bar.bind("<ButtonRelease-1>", stop_move)
+title_bar.bind("<B1-Motion>", on_motion)
 
 # Button
-toggle_button = Button(text='OFF', bg='black', fg='white',
-                       width=12, command=Simpletoggle)
-do = toggle_button['text']
+toggle_button = Button(root, text='OFF', bg='black', fg='white',
+                       width=12, command=lambda: start_thread(Simpletoggle))
 toggle_button.pack(pady=5)
 
 # Automode
-automode_button = Button(text='Automode off', bg='black',
-                         fg='white', width=12, command=Autotoggle)
-do = automode_button['text']
+automode_button = Button(root, text='Automode off', bg='black',
+                         fg='white', width=12, command=lambda: start_thread(Autotoggle))
 automode_button.pack(pady=5)
 
 # Lock in
-lockin_button = Button(text='Lock OFF', bg='black',
-                       fg='white', width=12, command=Lockin)
-do = lockin_button['text']
+lockin_button = Button(root, text='Lock OFF', bg='black',
+                       fg='white', width=12, command=lambda: start_thread(Lockin))
 lockin_button.pack(pady=5)
 
 # BanChamp
-ban_button = Button(text='BAN OFF', bg='black',
-                    fg='white', width=12, command=BanChamp)
-do = ban_button['text']
+ban_button = Button(root, text='BAN OFF', bg='black', fg='white',
+                    width=12, command=lambda: start_thread(BanChamp))
 ban_button.pack(pady=5)
 
+# Getting languages
 Lang()
-# Loop
-root.after(2000, img)
+
+# Starting img thread
+start_thread(img)
+
+# Run the main loop
 root.mainloop()
