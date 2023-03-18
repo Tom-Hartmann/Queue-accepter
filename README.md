@@ -6,20 +6,22 @@ Option to enable it urself manually or fully automatic for each game.
 
 ![v1.0.0](https://user-images.githubusercontent.com/35658558/213885042-942d8d4c-211f-4a84-9f7a-476392063271.png)
 ![v1.2.0](https://i.imgur.com/985tpzq.png)
+![v2.0.0](https://i.imgur.com/3rRVHep.png)
 
 Already compiled file (the .exe) download link :
 
 - [v1.0.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v1.0.0)
 - [v1.2.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v1.2.0)
 - [v1.5.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v1.5.0)
-
+- [v2.0.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v2.0.0)
 Features:
 
-- Click on the on/off button to beggin the search of a starting game or click on automode to let the program activate and deactivate the queue accepter.
+- Click on the on/off button to begin the search of a starting game or click on automode to let the program activate and deactivate the queue accepter.
 - The programm will automatically set to "off" once it found the game so no risk of clicking somewhere once you've started the game.
 - Automode will deactivate once you are in Preparation and ingame, once you are back out it will reactivate the searching.
 - If someone didn't accept the game the program will switch to "on" mode to search again
 - If you select Lock, it will autolock in the chamption you have pre selected.
+- Check the config.json for extra options to turn off or on with false/true statements.
 - If you select Ban, it will autoban the chamption named in the config.json file. Default beeing shaco. Note that this only works if you write the name correct! I will put most champs below so you can check without needing to go ingame.
 - That's it !
 
