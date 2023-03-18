@@ -1,4 +1,7 @@
 {
   "Language": "English",
-  "banchamp": "shaco"
+  "banchamp": "shaco",
+  "AutoLock": "True",
+  "AutoBan": "True"
 }
+
