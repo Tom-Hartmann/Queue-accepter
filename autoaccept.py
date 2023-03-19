@@ -3,7 +3,11 @@ import time
 import json
 import pyautogui
 import threading
+import asyncio
+import logging
 from tkinter import *
+
+logging.basicConfig(level=logging.DEBUG)
 
 pyautogui.FAILSAFE = False
 
@@ -42,33 +46,41 @@ def locate_and_click(image, confidence=0.7):
 
 
 localvaribable = False
+localacceptvaribable = True
 
 
-def img():
+async def set_localacceptvaribable_to_true(delay):
+    await asyncio.sleep(delay)
+    localacceptvaribable = True
+    logging.debug("localacceptvaribable set to True")
+
+
+async def img():
     while True:
-        if toggle_button.config('text')[-1] == 'OFF' and locate('balance.png'):
+        logging.debug("Running")
+        if toggle_button.config('text')[-1] == 'OFF' and locate('balance.png') and localacceptvaribable == True:
             if automode_button.config('text')[-1] == 'Automode ON':
                 toggle_button.config(text='ON')
-                if obj['AutoBan'] == "True":
-                    ban_button.config(text='BAN ON')
-                if obj['AutoBan'] == "True":
-                    lockin_button.config(text='Lock ON')
-                print('ON')
+            if obj['AutoBan'] == "True":
+                ban_button.config(text='BAN ON')
+            if obj['AutoBan'] == "True":
+                lockin_button.config(text='Lock ON')
+                logging.debug('ON')
         if toggle_button.config('text')[-1] == 'ON':
             if locate_and_click('accept.png'):
                 toggle_button.config(text='OFF')
-                print("Game accepted")
-                time.sleep(10)
-                print("Slept 10 seconds")
+                logging.debug("Game accepted")
+                localacceptvaribable == False
+                set_localacceptvaribable_to_true(10)
         if locate('notaccept.png'):
             toggle_button.config(text='ON')
-            print("Someone didn't accept!")
+            logging.debug("Someone didn't accept!")
         if toggle_button.config('text')[-1] == 'OFF':
             if locate('ban.png'):
-               localvaribable == True  # and locate('ban.png', confidence=0.9):
-               if ban_button.config('text')[-1] == 'BAN ON':
+                localvaribable == True
+                if ban_button.config('text')[-1] == 'BAN ON':
                     if localvaribable == True:
-                        print('BAN PHASE!')
+                        logging.debug('BAN PHASE!')
                         locate_and_click('search.png', confidence=0.9)
                         pyautogui.write(obj['banchamp'])
                         time.sleep(0.5)
@@ -96,40 +108,52 @@ def start_thread(target_function):
     thread.start()
 
 
+def start_asyncio_coroutine(target_function):
+    def run_coroutine_in_thread():
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(target_function())
+        loop.close()
+
+    thread = threading.Thread(target=run_coroutine_in_thread)
+    thread.daemon = True
+    thread.start()
+
+
 def Simpletoggle():
     if toggle_button.config('text')[-1] == 'ON':
         toggle_button.config(text='OFF')
-        print("OFF")
+        logging.debug("OFF")
     else:
         toggle_button.config(text='ON')
-        print("ON")
+        logging.debug("ON")
 
 
 def Autotoggle():
     if automode_button.config('text')[-1] == 'Automode ON':
         automode_button.config(text='Automode OFF')
-        print('Automode OFF')
+        logging.debug('Automode OFF')
     else:
         automode_button.config(text='Automode ON')
-        print('Automode ON')
+        logging.debug('Automode ON')
 
 
 def Lockin():
     if lockin_button.config('text')[-1] == 'Lock ON':
         lockin_button.config(text='Lock OFF')
-        print('Lock OFF')
+        logging.debug('Lock OFF')
     else:
         lockin_button.config(text='Lock ON')
-        print('Lock ON')
+        logging.debug('Lock ON')
 
 
 def BanChamp():
     if ban_button.config('text')[-1] == 'BAN ON':
         ban_button.config(text='BAN OFF')
-        print('BAN OFF')
+        logging.debug('BAN OFF')
     else:
         ban_button.config(text='BAN ON')
-        print('BAN ON')
+        logging.debug('BAN ON')
 
 
 def start_move(event):
@@ -203,7 +227,7 @@ ban_button.pack(pady=5)
 Lang()
 
 # Starting img thread
-start_thread(img)
+start_asyncio_coroutine(img)
 
 # Run the main loop
 root.mainloop()
