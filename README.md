@@ -6,7 +6,7 @@ Option to enable it urself manually or fully automatic for each game.
 
 ![v1.0.0](https://user-images.githubusercontent.com/35658558/213885042-942d8d4c-211f-4a84-9f7a-476392063271.png)
 ![v1.2.0](https://i.imgur.com/985tpzq.png)
-![v2.0.0](https://i.imgur.com/3rRVHep.png)
+![v2.0.0](https://i.imgur.com/4LBCwWN.png)
 
 Already compiled file (the .exe) download link :
 
@@ -14,6 +14,7 @@ Already compiled file (the .exe) download link :
 - [v1.2.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v1.2.0)
 - [v1.5.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v1.5.0)
 - [v2.0.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v2.0.0)
+
 Features:
 
 - Click on the on/off button to begin the search of a starting game or click on automode to let the program activate and deactivate the queue accepter.
