@@ -49,55 +49,67 @@ localvaribable = False
 localacceptvaribable = True
 
 
+async def localvaribable_to_true(delay):
+    await asyncio.sleep(delay)
+    localvaribable = False
+    logging.debug(localvaribable)
+    logging.debug("localvaribable set to True")
+
+
 async def set_localacceptvaribable_to_true(delay):
     await asyncio.sleep(delay)
     localacceptvaribable = True
+    logging.debug(localacceptvaribable)
     logging.debug("localacceptvaribable set to True")
 
 
 async def img():
     while True:
-        logging.debug("Running")
-        if toggle_button.config('text')[-1] == 'OFF' and locate('balance.png') and localacceptvaribable == True:
-            if automode_button.config('text')[-1] == 'Automode ON':
-                toggle_button.config(text='ON')
+        await asyncio.sleep(0.1)
+        if toggle_button.config('text')[-1] == 'OFF' and locate('balance.png') and localacceptvaribable == True and automode_button.config('text')[-1] == 'Automode ON':
+            toggle_button.config(text='ON')
             if obj['AutoBan'] == "True":
                 ban_button.config(text='BAN ON')
-            if obj['AutoBan'] == "True":
+                logging.debug('AutoBan ON')
+            if obj['AutoLock'] == "True":
                 lockin_button.config(text='Lock ON')
-                logging.debug('ON')
-        if toggle_button.config('text')[-1] == 'ON':
-            if locate_and_click('accept.png'):
-                toggle_button.config(text='OFF')
-                logging.debug("Game accepted")
-                localacceptvaribable == False
-                set_localacceptvaribable_to_true(10)
+                logging.debug('AutoLock ON')
+        if toggle_button.config('text')[-1] == 'ON' and locate_and_click('accept.png', confidence=0.8):
+            toggle_button.config(text='OFF')
+            logging.debug("Game accepted")
+            localacceptvaribable == False
+            await set_localacceptvaribable_to_true(10)
         if locate('notaccept.png'):
             toggle_button.config(text='ON')
             logging.debug("Someone didn't accept!")
-        if toggle_button.config('text')[-1] == 'OFF':
-            if locate('ban.png'):
-                localvaribable == True
-                if ban_button.config('text')[-1] == 'BAN ON':
-                    if localvaribable == True:
-                        logging.debug('BAN PHASE!')
-                        locate_and_click('search.png', confidence=0.9)
-                        pyautogui.write(obj['banchamp'])
-                        time.sleep(0.5)
-                        frame_location = locate('frame.png')
-                        pyautogui.moveTo(frame_location)
-                        x, y = pyautogui.position()
-                        pyautogui.click(y=y + 60, x=x)
-                        locate_and_click('ban2.png')
-                        time.sleep(1)
-                        locate_and_click('confirmban.png')
-                        ban_button.config(text='BAN OFF')
-                        localvaribable == False
-            if toggle_button.config('text')[-1] == 'OFF' and lockin_button != None:
-                if lockin_button.config('text')[-1] == 'Lock ON':
-                    if locate_and_click('lockin.png'):
-                        lockin_button.config(text='Lock OFF')
-
+        if locate('ban.png') and toggle_button.config('text')[-1] == 'OFF' and localvaribable == False:
+            logging.debug("Setting local variable to True")
+            localvaribable == True
+            if ban_button.config('text')[-1] == 'BAN ON' and localvaribable == True:
+                logging.debug('BAN PHASE!')
+                locate_and_click('search.png', confidence=0.7)
+                pyautogui.hotkey('ctrl', 'a')
+                asyncio.sleep(0.2)
+                pyautogui.hotkey('delete')
+                pyautogui.write(obj['banchamp'])
+                asyncio.sleep(0.5)
+                frame_location = locate('frame.png')
+                pyautogui.moveTo(frame_location)
+                x, y = pyautogui.position()
+                pyautogui.click(y=y + 60, x=x)
+                locate_and_click('ban2.png')
+                asyncio.sleep(1)
+                ban_button.config(text='BAN OFF')
+                if locate_and_click('confirmban.png'):
+                    logging.debug('Clicked confirm ban')
+                    logging.debug('Now setting localvariable_to_true')
+                    await localvaribable_to_true(10)
+                else:
+                    logging.debug('Now setting localvariable_to_true')
+                    await localvaribable_to_true(10)
+        if toggle_button.config('text')[-1] == 'OFF' and lockin_button.config('text')[-1] == 'Lock ON':
+                if locate_and_click('lockin.png'):
+                    lockin_button.config(text='Lock OFF')
 
 time.sleep(1)
 
