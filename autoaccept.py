@@ -106,9 +106,9 @@ async def img():
             ycords = int(''.join(str(i) for i in lst))
             logging.debug(ycords)
             ycords += 60
-            await pyautogui.moveTo(frame_location)
+            pyautogui.moveTo(frame_location)
             x, y = pyautogui.position()
-            await pyautogui.click(y=ycords, x=x)
+            pyautogui.click(y=ycords, x=x)
             locate_and_click('ban2.png')
             time.sleep(1)
             ban_button.config(text='BAN OFF')
