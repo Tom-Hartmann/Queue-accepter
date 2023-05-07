@@ -6,11 +6,11 @@ if (sys.platform == "win32"):
     base = "Win32GUI"
 
 executables = [Executable("autoaccept.py", base=base, icon="icon.ico")]
-packages = ["idna", "tkinter", "pyautogui", "os"]
+packages = ["idna", "tkinter", "pyautogui", "os","json5"]
 options = {
     'build_exe': {
         'packages': packages,
-        'include_files': ['icon.ico', 'config.json', "Languages"]
+        'include_files': ['icon.ico', 'config.json5', "Languages"]
     },
 }
 
