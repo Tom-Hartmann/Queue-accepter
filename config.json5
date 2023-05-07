@@ -1,0 +1,13 @@
+{
+  // Language setting for the app
+  Language: "English",
+
+  // The selected champion
+  banchamp: "shaco",
+
+  // Enable or disable auto-lock // True or False
+  AutoLock: "True",
+
+  // Enable or disable auto-ban // True or False
+  AutoBan: "True",
+}
