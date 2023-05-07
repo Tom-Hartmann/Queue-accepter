@@ -15,7 +15,7 @@ Queue Accepter is a Python program that helps automate the process of queuing fo
 1. Install Python 3.x from the official website: https://www.python.org/downloads/
 2. Clone this repository using `git clone https://github.com/Tom-Hartmann/queue-accepter.git`
 3. Install the required Python packages by running `pip install -r requirements.txt`
-4. Edit the `config.json` file to your liking
+4. Edit the `config.json5` file to your liking
 
 ## Usage
 
