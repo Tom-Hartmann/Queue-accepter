@@ -1,6 +1,6 @@
 import os
+import json5
 import time
-import json
 import pyautogui
 import threading
 import asyncio
@@ -11,8 +11,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 pyautogui.FAILSAFE = False
 
-with open('config.json', 'r') as json_file:
-    obj = json.loads(json_file.read())
+with open('config.json5', 'r') as json_file:
+    obj = json5.load(json_file)
 
 # Get Language
 
