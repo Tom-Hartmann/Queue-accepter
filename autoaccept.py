@@ -64,15 +64,13 @@ def set_localacceptvaribable_to_true(delay):
 
 
 async def img():
-    global localbanphase, localacceptvaribable, localvaribable
     while True:
+        logging.debug("img function running")
         await asyncio.sleep(0.1)
         if (
             toggle_button.config("text")[-1] == "OFF"
             and locate("balance.png")
-            and localacceptvaribable == True
             and automode_button.config("text")[-1] == "Automode ON"
-            and localbanphase == False
         ):
             toggle_button.config(text="ON")
             if obj["AutoBan"] == "True":
@@ -82,7 +80,6 @@ async def img():
                 lockin_button.config(text="Lock ON")
                 logging.debug("AutoLock ON")
         if locate("banphase.png", confidence=0.5):
-            localbanphase = True
             toggle_button.config("text")[-1] == "OFF"
         if locate("frame.png"):
             toggle_button.config("text")[-1] == "OFF"
@@ -94,45 +91,32 @@ async def img():
             pyautogui.moveTo(current_position, duration=0)
             toggle_button.config(text="OFF")
             logging.debug("Game accepted")
-            localacceptvaribable = False
         if locate("ban.png", confidence=0.5) and toggle_button.config("text")[-1] == "ON":
-            toggle_button.config("text")[-1] == "OFF"
-        if locate("notaccept.png"):
+            toggle_button.config(text="OFF")
+        if locate("notaccept.png") and automode_button.config("text")[-1] == "Automode ON":
             toggle_button.config(text="ON")
             logging.debug("Someone didn't accept!")
         if (
             locate("ban.png", confidence=0.9)
             and toggle_button.config("text")[-1] == "OFF"
-            and localvaribable == False
             and ban_button.config("text")[-1] == "BAN ON"
         ):
             logging.debug("Setting local variable to True")
-            localvaribable = True
             logging.debug("BAN PHASE!")
-            frame_location = pyautogui.locateCenterOnScreen("frame.png", confidence=0.6)
+            frame_location = pyautogui.locateCenterOnScreen("frame.png", confidence=0.3)
             locate_and_click("search.png", confidence=0.7)
             pyautogui.hotkey("ctrl", "a")
             pyautogui.hotkey("delete")
             pyautogui.write(obj["banchamp"])
             time.sleep(0.5)
-            print(frame_location)
-            xlist = list(frame_location)
-            del xlist[1]
-            lst = list(frame_location)
-            del lst[0]
-            # Thanks to gianpi#1307 für helping me with this part.
-            ycords = int("".join(str(i) for i in lst))
-            ycords += 60
-            pyautogui.moveTo(frame_location)
-            x, y = pyautogui.position()
-            pyautogui.click(y=ycords, x=x)
+            x, y = frame_location[0], frame_location[1] + 60
+            pyautogui.click(x,y)
             locate_and_click("ban2.png")
             pyautogui.click()
             time.sleep(1)
             ban_button.config(text="BAN OFF")
-            localbanphase = False
             logging.debug("Now setting localvariable_to_true")
-            set_localacceptvaribable_to_true(10)
+            #set_localacceptvaribable_to_true(10)
             if locate("confirmban.png", 0.8):
                 logging.debug("Found Confirm Ban")
                 locate_and_click("confirmban.png", 0.7)
