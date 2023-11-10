@@ -65,7 +65,6 @@ def set_localacceptvaribable_to_true(delay):
 
 async def img():
     while True:
-        logging.debug("img function running")
         await asyncio.sleep(0.1)
         if (
             toggle_button.config("text")[-1] == "OFF"
@@ -84,13 +83,14 @@ async def img():
         if locate("frame.png"):
             toggle_button.config("text")[-1] == "OFF"
         if toggle_button.config("text")[-1] == "ON" and locate(
-            "accept.png", confidence=0.8
+            "accept.png", confidence=0.9
         ):
             current_position = pyautogui.position()
             locate_and_click("accept.png")
             pyautogui.moveTo(current_position, duration=0)
             toggle_button.config(text="OFF")
             logging.debug("Game accepted")
+            time.sleep(10)
         if locate("ban.png", confidence=0.5) and toggle_button.config("text")[-1] == "ON":
             toggle_button.config(text="OFF")
         if locate("notaccept.png") and automode_button.config("text")[-1] == "Automode ON":
@@ -103,20 +103,20 @@ async def img():
         ):
             logging.debug("Setting local variable to True")
             logging.debug("BAN PHASE!")
-            frame_location = pyautogui.locateCenterOnScreen("frame.png", confidence=0.3)
+            frame_location = pyautogui.locateCenterOnScreen("frame.png", confidence=0.5)
             locate_and_click("search.png", confidence=0.7)
             pyautogui.hotkey("ctrl", "a")
             pyautogui.hotkey("delete")
             pyautogui.write(obj["banchamp"])
             time.sleep(0.5)
-            x, y = frame_location[0], frame_location[1] + 60
-            pyautogui.click(x,y)
+            xvar, yvar = frame_location[0], frame_location[1] + 60
+            print(xvar,yvar)
+            pyautogui.click(x=xvar,y=yvar)
             locate_and_click("ban2.png")
             pyautogui.click()
             time.sleep(1)
             ban_button.config(text="BAN OFF")
             logging.debug("Now setting localvariable_to_true")
-            #set_localacceptvaribable_to_true(10)
             if locate("confirmban.png", 0.8):
                 logging.debug("Found Confirm Ban")
                 locate_and_click("confirmban.png", 0.7)
@@ -134,8 +134,10 @@ async def img():
         if locate("confirmban.png", 0.8):
             locate_and_click("confirmban.png", 0.7)
             logging.debug("Found Confirm Ban")
-
-time.sleep(1)
+        if locate("declineswap.png",confidence=1):
+            locate_and_click("declineswap.png")
+            logging.debug("Declinded swap!")
+time.sleep(0.1)
 
 
 def start_thread(target_function):
