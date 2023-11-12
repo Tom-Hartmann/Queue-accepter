@@ -134,7 +134,7 @@ async def img():
         if locate("confirmban.png", 0.8):
             locate_and_click("confirmban.png", 0.7)
             logging.debug("Found Confirm Ban")
-        if locate("declineswap.png",confidence=1):
+        if locate("declineswap.png",confidence=0.8):
             locate_and_click("declineswap.png")
             logging.debug("Declinded swap!")
 time.sleep(0.1)
