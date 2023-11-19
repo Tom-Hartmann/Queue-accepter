@@ -134,9 +134,10 @@ async def img():
         if locate("confirmban.png", 0.8):
             locate_and_click("confirmban.png", 0.7)
             logging.debug("Found Confirm Ban")
-        if locate("declineswap.png",confidence=0.8):
-            locate_and_click("declineswap.png")
-            logging.debug("Declinded swap!")
+        if auto_decline.config("text")[-1] == "DECLINE ON":
+#            if locate("declineswap.png"):    
+                if locate_and_click("declineswap.png"):
+                    logging.debug("Declinded swap!")
 time.sleep(0.1)
 
 
@@ -193,6 +194,14 @@ def BanChamp():
         ban_button.config(text="BAN ON")
         logging.debug("BAN ON")
 
+def AutoDecline():
+    if auto_decline.config("text")[-1] == "DECLINE ON":
+        auto_decline.config(text="DECLINE OFF")
+        logging.debug("DECLINE OFF")
+    else:
+        auto_decline.config(text="DECLINE ON")
+        logging.debug("DECLINE ON")
+
 
 def start_move(event):
     global x, y
@@ -216,7 +225,7 @@ def on_motion(event):
 
 # Create main window
 root = Tk()
-root.geometry("250x180")
+root.geometry("250x210")
 root.configure(bg="black")
 
 # Remove default title bar
@@ -284,6 +293,17 @@ ban_button = Button(
     command=lambda: start_thread(BanChamp),
 )
 ban_button.pack(pady=5)
+
+#Auto decline for Aram
+auto_decline = Button(
+    root,
+    text="DECLINE OFF",
+    bg="black",
+    fg="white",
+    width=12,
+    command=lambda: start_thread(AutoDecline),
+)
+auto_decline.pack(pady=5)
 
 # Getting languages
 Lang()
