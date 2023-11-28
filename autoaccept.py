@@ -44,25 +44,6 @@ def locate_and_click(image, confidence=0.7):
         return True
     return False
 
-
-localvaribable = False
-localacceptvaribable = True
-localbanphase = False
-
-async def localvaribable_to_true(delay):
-    await asyncio.sleep(delay)
-    localvaribable = False
-    logging.debug(localvaribable)
-    logging.debug("localvaribable set to True")
-
-
-def set_localacceptvaribable_to_true(delay):
-    time.sleep(delay)
-    localacceptvaribable = True
-    logging.debug(localacceptvaribable)
-    logging.debug("localacceptvaribable set to True")
-
-
 async def img():
     while True:
         await asyncio.sleep(0.1)
