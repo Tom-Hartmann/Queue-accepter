@@ -15,8 +15,6 @@ with open("config.json5", "r") as json_file:
     obj = json5.load(json_file)
 
 # Get Language
-
-
 def Lang():
     path = os.getcwd()
     os.chdir(os.path.join(path, "Languages"))
@@ -25,10 +23,8 @@ def Lang():
     text = obj["Language"]
     os.chdir(os.path.join(path, text))
 
-
 def on_close():
     root.destroy()
-
 
 def locate(image, confidence=0.7):
     location = pyautogui.locateCenterOnScreen(image, confidence=confidence)
@@ -121,12 +117,10 @@ async def img():
                     logging.debug("Declinded swap!")
 time.sleep(0.1)
 
-
 def start_thread(target_function):
     thread = threading.Thread(target=target_function)
     thread.daemon = True
     thread.start()
-
 
 def start_asyncio_coroutine(target_function):
     def run_coroutine_in_thread():
@@ -139,7 +133,6 @@ def start_asyncio_coroutine(target_function):
     thread.daemon = True
     thread.start()
 
-
 def Simpletoggle():
     if toggle_button.config("text")[-1] == "ON":
         toggle_button.config(text="OFF")
@@ -147,7 +140,6 @@ def Simpletoggle():
     else:
         toggle_button.config(text="ON")
         logging.debug("ON")
-
 
 def Autotoggle():
     if automode_button.config("text")[-1] == "Automode ON":
@@ -157,7 +149,6 @@ def Autotoggle():
         automode_button.config(text="Automode ON")
         logging.debug("Automode ON")
 
-
 def Lockin():
     if lockin_button.config("text")[-1] == "Lock ON":
         lockin_button.config(text="Lock OFF")
@@ -165,7 +156,6 @@ def Lockin():
     else:
         lockin_button.config(text="Lock ON")
         logging.debug("Lock ON")
-
 
 def BanChamp():
     if ban_button.config("text")[-1] == "BAN ON":
@@ -183,18 +173,15 @@ def AutoDecline():
         auto_decline.config(text="DECLINE ON")
         logging.debug("DECLINE ON")
 
-
 def start_move(event):
     global x, y
     x = event.x
     y = event.y
 
-
 def stop_move(event):
     global x, y
     x = None
     y = None
-
 
 def on_motion(event):
     global x, y
@@ -202,7 +189,6 @@ def on_motion(event):
     deltay = event.y - y
     new_position = "+{}+{}".format(root.winfo_x() + deltax, root.winfo_y() + deltay)
     root.geometry(new_position)
-
 
 # Create main window
 root = Tk()
