@@ -6,10 +6,13 @@ import threading
 import asyncio
 import logging
 from tkinter import *
+from pyscreeze import ImageNotFoundException
+
+ImageNotFoundException(True)
 
 logging.basicConfig(level=logging.DEBUG)
 
-pyautogui.FAILSAFE = False
+# pyautogui.FAILSAFE = False
 
 with open("config.json5", "r") as json_file:
     obj = json5.load(json_file)
@@ -26,26 +29,24 @@ def Lang():
 def on_close():
     root.destroy()
 
-def locate(image, confidence=0.7):
-    location = pyautogui.locateCenterOnScreen(image, confidence=confidence)
-    if location is not None:
-        return True
-    return False
-
-
-def locate_and_click(image, confidence=0.7):
-    location = pyautogui.locateCenterOnScreen(image, confidence=confidence)
-    if location is not None:
-        pyautogui.click(location)
-        return True
-    return False
-
-async def img():
+def locateImage(image, confidence=0.7, click=False):
+    try: 
+        location = pyautogui.locateCenterOnScreen(image, confidence=confidence)
+        if location:
+            if click:
+                pyautogui.click(location)
+            return True
+        return False
+    except Exception as e:
+        print(f"An error occured: {e}")
+        return False
+    
+async def main_function():
     while True:
         await asyncio.sleep(0.1)
         if (
             toggle_button.config("text")[-1] == "OFF"
-            and locate("balance.png")
+            and (locateImage("social.png")  or locateImage("balance.png") or locateImage("navigation_bar.png") or locateImage("balance1.png"))
             and automode_button.config("text")[-1] == "Automode ON"
         ):
             toggle_button.config(text="ON")
@@ -55,33 +56,33 @@ async def img():
             if obj["AutoLock"] == "True":
                 lockin_button.config(text="Lock ON")
                 logging.debug("AutoLock ON")
-        if locate("banphase.png", confidence=0.5):
+        if locateImage("banphase.png", confidence=0.5):
             toggle_button.config("text")[-1] == "OFF"
-        if locate("frame.png"):
+        if locateImage("frame.png"):
             toggle_button.config("text")[-1] == "OFF"
-        if toggle_button.config("text")[-1] == "ON" and locate(
+        if toggle_button.config("text")[-1] == "ON" and locateImage(
             "accept.png", confidence=0.9
         ):
             current_position = pyautogui.position()
-            locate_and_click("accept.png")
+            locateImage("accept.png",click=True)
             pyautogui.moveTo(current_position, duration=0)
             toggle_button.config(text="OFF")
             logging.debug("Game accepted")
             time.sleep(10)
-        if locate("ban.png", confidence=0.5) and toggle_button.config("text")[-1] == "ON":
+        if locateImage("ban.png", confidence=0.5) and toggle_button.config("text")[-1] == "ON":
             toggle_button.config(text="OFF")
-        if locate("notaccept.png") and automode_button.config("text")[-1] == "Automode ON":
+        if locateImage("notaccept.png") and automode_button.config("text")[-1] == "Automode ON":
             toggle_button.config(text="ON")
             logging.debug("Someone didn't accept!")
         if (
-            locate("ban.png", confidence=0.9)
+            locateImage("ban.png", confidence=0.9)
             and toggle_button.config("text")[-1] == "OFF"
             and ban_button.config("text")[-1] == "BAN ON"
         ):
             logging.debug("Setting local variable to True")
             logging.debug("BAN PHASE!")
-            frame_location = pyautogui.locateCenterOnScreen("frame.png", confidence=0.5)
-            locate_and_click("search.png", confidence=0.7)
+            frame_location = pyautogui.locateImageCenterOnScreen("frame.png", confidence=0.5)
+            locateImage("search.png", confidence=0.7,click=True)
             pyautogui.hotkey("ctrl", "a")
             pyautogui.hotkey("delete")
             pyautogui.write(obj["banchamp"])
@@ -89,34 +90,33 @@ async def img():
             xvar, yvar = frame_location[0], frame_location[1] + 60
             print(xvar,yvar)
             pyautogui.click(x=xvar,y=yvar)
-            locate_and_click("ban2.png")
+            locateImage("ban2.png",click=True)
             pyautogui.click()
             time.sleep(1)
             ban_button.config(text="BAN OFF")
             logging.debug("Now setting localvariable_to_true")
-            if locate("confirmban.png", 0.8):
+            if locateImage("confirmban.png", 0.8):
                 logging.debug("Found Confirm Ban")
-                locate_and_click("confirmban.png", 0.7)
+                locateImage("confirmban.png", 0.7,click=True)
                 logging.debug("Clicked confirm ban")
-        if locate("confirmban.png", 0.8):
+        if locateImage("confirmban.png", 0.8):
             logging.debug("Found Confirm Ban")
-            locate_and_click("confirmban.png", 0.7)
+            locateImage("confirmban.png", 0.7,click=True)
             logging.debug("Clicked confirm ban")
         if (
             toggle_button.config("text")[-1] == "OFF"
             and lockin_button.config("text")[-1] == "Lock ON"
         ):
-            if locate_and_click("lockin.png"):
+            if locateImage("lockin.png",click=True):
                 lockin_button.config(text="Lock OFF")
-        if locate("confirmban.png", 0.8):
-            locate_and_click("confirmban.png", 0.7)
+        if locateImage("confirmban.png", 0.8):
+            locateImage("confirmban.png", 0.7,click=True)
             logging.debug("Found Confirm Ban")
         if auto_decline.config("text")[-1] == "DECLINE ON":
-#            if locate("declineswap.png"):    
-                if locate_and_click("declineswap.png"):
+#            if locateImage("declineswap.png"):    
+                if locateImage("declineswap.png",click=True):
                     logging.debug("Declinded swap!")
 time.sleep(0.1)
-
 def start_thread(target_function):
     thread = threading.Thread(target=target_function)
     thread.daemon = True
@@ -276,7 +276,6 @@ auto_decline.pack(pady=5)
 Lang()
 
 # Starting img thread
-start_asyncio_coroutine(img)
-
+start_asyncio_coroutine(main_function)
 # Run the main loop
 root.mainloop()
