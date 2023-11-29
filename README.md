@@ -59,8 +59,11 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 ### Version 3.0
 
-![Queue Accepter Version 2.0 Screenshot](https://i.imgur.com/4LBCwWN.png)
----
+![Queue Accepter Version 3.0 Screenshot](https://i.imgur.com/4LBCwWN.png)
+
+### Version 3.1
+
+![Queue Accepter Version 3.1 Screenshot](https://i.imgur.com/LjcaZ1g.png)
 
 Already compiled file (the .exe) download link :
 
@@ -69,3 +72,4 @@ Already compiled file (the .exe) download link :
 - [v1.5.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v1.5.0)
 - [v2.0.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v2.0.0)
 - [v3.0.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v3.0.0)
+- [v3.1.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v3.1.0)
