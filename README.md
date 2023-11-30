@@ -28,6 +28,10 @@ Queue Accepter is a Python program that helps automate the process of queuing fo
 
 If you'd like to contribute to Queue Accepter, please open an issue or submit a pull request on GitHub.
 
+## Credits
+
+Credits to the original script and inspiration [Vitassy](https://github.com/Vitassy/LoL_Auto_Accept)
+
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
@@ -73,3 +77,4 @@ Already compiled file (the .exe) download link :
 - [v2.0.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v2.0.0)
 - [v3.0.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v3.0.0)
 - [v3.1.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v3.1.0)
+- 
