@@ -77,4 +77,4 @@ Already compiled file (the .exe) download link :
 - [v2.0.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v2.0.0)
 - [v3.0.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v3.0.0)
 - [v3.1.0](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v3.1.0)
-- 
+- [v3.1.1](https://github.com/Tom-Hartmann/Queue-accepter/releases/tag/v3.1.0)
