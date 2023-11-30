@@ -5,7 +5,7 @@ Queue Accepter is a Python program that helps automate the process of queuing fo
 ## Features
 
 - Accept games automatically
-- Automode to accept games as soon as possible
+- Automode, automatically changes Champion lock, ban and queue accepter
 - Lock in a champion automatically
 - Ban a certain champion automatically
 - Multi-language support
@@ -19,7 +19,7 @@ Queue Accepter is a Python program that helps automate the process of queuing fo
 
 ## Usage
 
-1. Run the program by executing `main.py`
+1. Run the program by executing `autoaccept.py`
 2. Use the GUI buttons to control the program
 3. To move the GUI window, drag the custom title bar located at the top of the window
 4. To close the program, click the "X" button on the title bar
@@ -50,6 +50,17 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 - Added support for banning a certain champion automatically
 - Added multi-language support
 - Improved accuracy and reliability of image recognition
+
+### Version 3.0
+
+- Rewrote to support multithreading
+- Custom Navigationbar
+
+### Version 3.1
+
+- Added Auto Decline
+- Added requirements file
+- Added more pictures incase the league ui changes
 
 ## Screenshots
 
