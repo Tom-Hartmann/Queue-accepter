@@ -10,7 +10,7 @@ from pyscreeze import ImageNotFoundException
 
 ImageNotFoundException(True)
 
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG)
 
 # pyautogui.FAILSAFE = False
 
@@ -52,10 +52,8 @@ async def main_function():
             toggle_button.config(text="ON")
             if obj["AutoBan"] == "True":
                 ban_button.config(text="BAN ON")
-                logging.debug("AutoBan ON")
             if obj["AutoLock"] == "True":
                 lockin_button.config(text="Lock ON")
-                logging.debug("AutoLock ON")
         if locateImage("banphase.png", confidence=0.5):
             toggle_button.config("text")[-1] == "OFF"
         if locateImage("frame.png"):
@@ -67,21 +65,17 @@ async def main_function():
             locateImage("accept.png",click=True)
             pyautogui.moveTo(current_position, duration=0)
             toggle_button.config(text="OFF")
-            logging.debug("Game accepted")
             time.sleep(10)
         if locateImage("ban.png", confidence=0.5) and toggle_button.config("text")[-1] == "ON":
             toggle_button.config(text="OFF")
         if locateImage("notaccept.png") and automode_button.config("text")[-1] == "Automode ON":
             toggle_button.config(text="ON")
-            logging.debug("Someone didn't accept!")
         if (
             locateImage("ban.png", confidence=0.9)
             and toggle_button.config("text")[-1] == "OFF"
             and ban_button.config("text")[-1] == "BAN ON"
         ):
-            logging.debug("Setting local variable to True")
-            logging.debug("BAN PHASE!")
-            frame_location = pyautogui.locateImageCenterOnScreen("frame.png", confidence=0.5)
+            frame_location = pyautogui.locateCenterOnScreen("frame.png", confidence=0.5)
             locateImage("search.png", confidence=0.7,click=True)
             pyautogui.hotkey("ctrl", "a")
             pyautogui.hotkey("delete")
@@ -94,28 +88,23 @@ async def main_function():
             pyautogui.click()
             time.sleep(1)
             ban_button.config(text="BAN OFF")
-            logging.debug("Now setting localvariable_to_true")
             if locateImage("confirmban.png", 0.8):
-                logging.debug("Found Confirm Ban")
                 locateImage("confirmban.png", 0.7,click=True)
-                logging.debug("Clicked confirm ban")
         if locateImage("confirmban.png", 0.8):
-            logging.debug("Found Confirm Ban")
             locateImage("confirmban.png", 0.7,click=True)
-            logging.debug("Clicked confirm ban")
         if (
             toggle_button.config("text")[-1] == "OFF"
             and lockin_button.config("text")[-1] == "Lock ON"
         ):
-            if locateImage("lockin.png",click=True):
+            if locateImage("lockin.png",click=True,confidence=0.8):
                 lockin_button.config(text="Lock OFF")
         if locateImage("confirmban.png", 0.8):
             locateImage("confirmban.png", 0.7,click=True)
-            logging.debug("Found Confirm Ban")
-        if auto_decline.config("text")[-1] == "DECLINE ON":
-#            if locateImage("declineswap.png"):    
-                if locateImage("declineswap.png",click=True):
-                    logging.debug("Declinded swap!")
+        if auto_decline.config("text")[-1] == "DECLINE ON":   
+            try: 
+                locateImage("declineswap.png",click=True)
+            except:
+                pass
 time.sleep(0.1)
 def start_thread(target_function):
     thread = threading.Thread(target=target_function)
